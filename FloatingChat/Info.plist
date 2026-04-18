@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Oculta el ícono del Dock — solo vive en la barra de menú -->
+  <key>LSUIElement</key>
+  <true/>
+
+  <key>CFBundleName</key>
+  <string>FloatingChat</string>
+
+  <key>CFBundleDisplayName</key>
+  <string>FloatingChat</string>
+
+  <key>CFBundleIdentifier</key>
+  <string>com.tuusuario.FloatingChat</string>
+
+  <key>CFBundleVersion</key>
+  <string>1</string>
+
+  <key>CFBundleShortVersionString</key>
+  <string>1.0</string>
+
+  <key>NSPrincipalClass</key>
+  <string>NSApplication</string>
+
+  <key>NSSupportsAutomaticGraphicsSwitching</key>
+  <true/>
+
+  <!-- Requerido en macOS 11+ para acceso a red -->
+  <key>NSAppTransportSecurity</key>
+  <dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <false/>
+  </dict>
+</dict>
+</plist>
