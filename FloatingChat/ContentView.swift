@@ -25,7 +25,7 @@ class ChatViewModel: ObservableObject {
         _isLoading    = Published(initialValue: false)
         _showSettings = Published(initialValue: false)
         apiKey        = UserDefaults.standard.string(forKey: "apiKey")       ?? ""
-        model         = UserDefaults.standard.string(forKey: "model")        ?? "gpt-4o-mini"
+        model         = UserDefaults.standard.string(forKey: "model")        ?? "gpt-5.4-nano"
         systemPrompt  = UserDefaults.standard.string(forKey: "systemPrompt") ?? "Eres un asistente util y conciso. No uses Markdown."
     }
 
