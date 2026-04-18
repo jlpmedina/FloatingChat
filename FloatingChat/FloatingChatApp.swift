@@ -14,6 +14,7 @@ struct FloatingChatApp: App {
 class AppDelegate: NSObject, NSApplicationDelegate {
     var panel: NSPanel!
     var statusItem: NSStatusItem!
+    var hotKeyController: HotKeyController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory) // Oculta ícono del Dock
@@ -21,12 +22,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         setupPanel()
         setupStatusBarItem()
 
-        // Hotkey global: Cmd + Shift + Space
-        NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            if event.modifierFlags.contains([.command, .shift]) && event.keyCode == 49 {
-                self?.togglePanel()
-            }
+        hotKeyController = HotKeyController { [weak self] in
+            self?.togglePanel()
         }
+
+        if hotKeyController?.register() == false {
+            NSLog("No se pudo registrar el atajo global Cmd + Shift + Space.")
+        }
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        hotKeyController?.unregister()
     }
 
     private func setupPanel() {
@@ -48,6 +54,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.isMovableByWindowBackground = true
         panel.titlebarAppearsTransparent = true
         panel.backgroundColor = NSColor.windowBackgroundColor
+        panel.isReleasedWhenClosed = false
         panel.minSize = NSSize(width: 320, height: 400)
 
         let hostingView = NSHostingView(rootView: ContentView())
@@ -78,7 +85,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if panel.isVisible {
             panel.orderOut(nil)
         } else {
+            panel.center()
             panel.makeKeyAndOrderFront(nil)
+            panel.orderFrontRegardless()
             NSApp.activate(ignoringOtherApps: true)
         }
     }
