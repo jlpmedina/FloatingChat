@@ -12,6 +12,7 @@ struct FloatingChatApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    private let panelAutosaveName = "FloatingChatPanelFrame"
     var panel: NSPanel!
     var statusItem: NSStatusItem!
     var hotKeyController: HotKeyController?
@@ -56,10 +57,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.backgroundColor = NSColor.windowBackgroundColor
         panel.isReleasedWhenClosed = false
         panel.minSize = NSSize(width: 320, height: 400)
+        panel.setFrameAutosaveName(panelAutosaveName)
 
         let hostingView = NSHostingView(rootView: ContentView())
         panel.contentView = hostingView
-        panel.center()
+        if panel.setFrameUsingName(panelAutosaveName) == false {
+            panel.center()
+        }
         panel.makeKeyAndOrderFront(nil)
     }
 
@@ -85,7 +89,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if panel.isVisible {
             panel.orderOut(nil)
         } else {
-            panel.center()
             panel.makeKeyAndOrderFront(nil)
             panel.orderFrontRegardless()
             NSApp.activate(ignoringOtherApps: true)
