@@ -18,6 +18,7 @@ struct ContentView: View {
                         Image(systemName: "trash")
                     }
                         .buttonStyle(.borderless)
+                        .keyboardShortcut("k", modifiers: .command)
                 }
                 Button {
                     vm.showSettings = true
