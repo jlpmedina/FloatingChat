@@ -1,6 +1,10 @@
 import SwiftUI
 import AppKit
 
+extension Notification.Name {
+    static let floatingChatShouldFocusInput = Notification.Name("floatingChatShouldFocusInput")
+}
+
 @main
 struct FloatingChatApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
@@ -92,6 +96,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             panel.makeKeyAndOrderFront(nil)
             panel.orderFrontRegardless()
             NSApp.activate(ignoringOtherApps: true)
+            NotificationCenter.default.post(name: .floatingChatShouldFocusInput, object: nil)
         }
     }
 }

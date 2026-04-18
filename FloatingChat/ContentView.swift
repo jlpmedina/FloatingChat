@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 struct ContentView: View {
     @StateObject private var vm = ChatViewModel()
@@ -114,6 +115,9 @@ struct ContentView: View {
             SettingsSheet(vm: vm)
         }
         .onAppear { focused = true }
+        .onReceive(NotificationCenter.default.publisher(for: .floatingChatShouldFocusInput)) { _ in
+            focused = true
+        }
     }
 }
 
