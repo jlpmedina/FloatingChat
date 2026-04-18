@@ -52,24 +52,9 @@ FloatingChat es una app pensada para hacer consultas pequeñas de forma rápida 
 
 Ejecuta `swift test` desde la raíz del proyecto para correr los tests del ViewModel y del cliente HTTP.
 
-## Distribución
+## Descarga
 
-- Archivo Release listo para subir: [FloatingChat-Release.zip](FloatingChat-Release.zip)
-- El ZIP contiene [FloatingChat.app](FloatingChat.app) empaquetada desde una build Release.
-
-### Publicar en GitHub Releases
-
-1. Crea y sube una etiqueta, por ejemplo `v1.0.0`.
-2. En GitHub, abre la sección Releases del repositorio.
-3. Crea un nuevo release usando esa etiqueta.
-4. Agrega título, notas de versión y sube [FloatingChat-Release.zip](FloatingChat-Release.zip) como asset.
-5. Publica el release.
-
-Si usas GitHub CLI, puedes crear el release con:
-
-```bash
-gh release create v1.0.0 FloatingChat-Release.zip --title "v1.0.0" --notes "Primera versión estable"
-```
+[Descargar FloatingChat Release](FloatingChat-Release.zip)
 
 ## Licencia
 
