@@ -12,6 +12,12 @@ FloatingChat es una app pensada para hacer consultas pequeñas de forma rápida 
 - Envía mensajes a OpenAI usando el endpoint de chat completions.
 - Guarda la API key en Keychain y la configuración no sensible en UserDefaults.
 
+## Capturas de pantalla
+
+| Chat principal | Ajustes | Vista expandida |
+|---|---|---|
+| ![Chat principal](screens/screenshot-chat.png) | ![Ajustes](screens/screenshot-settings.png) | ![Vista expandida](screens/screenshot-expanded.png) |
+
 ## Requisitos
 
 - macOS
