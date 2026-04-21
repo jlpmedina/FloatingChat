@@ -60,7 +60,7 @@ Ejecuta `swift test` desde la raíz del proyecto para correr los tests del ViewM
 
 ## Descarga
 
-[Descargar FloatingChat Release](FloatingChat-Release.zip)
+[Descargar última versión](https://github.com/jlpmedina/FloatingChat/releases/latest)
 
 ## Licencia
 
