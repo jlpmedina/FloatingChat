@@ -56,10 +56,11 @@ struct OpenAIService {
         messages: [ChatMessage],
         apiKey: String,
         model: String,
-        session: URLSession = OpenAIService.makeSession()
+        session: URLSession? = nil
     ) async throws -> String {
         let trimmedKey = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedKey.isEmpty else { throw OpenAIError.missingKey }
+        let session = session ?? makeSession()
 
         var req = URLRequest(url: AppConfiguration.chatCompletionsURL)
         req.httpMethod = "POST"

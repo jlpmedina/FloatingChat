@@ -20,12 +20,14 @@ final class ChatViewModel: ObservableObject {
     private(set) var systemPrompt: String
 
     init(
-        settingsStore: ChatSettingsStoring = UserDefaultsChatSettingsStore(),
-        apiKeyStore: APIKeyStoring = KeychainAPIKeyStore(),
+        settingsStore: ChatSettingsStoring? = nil,
+        apiKeyStore: APIKeyStoring? = nil,
         sendMessage: @escaping SendMessageHandler = { messages, apiKey, model in
             try await OpenAIService.send(messages: messages, apiKey: apiKey, model: model)
         }
     ) {
+        let settingsStore = settingsStore ?? UserDefaultsChatSettingsStore()
+        let apiKeyStore = apiKeyStore ?? KeychainAPIKeyStore()
         let settings = settingsStore.loadSettings()
 
         self.settingsStore = settingsStore
