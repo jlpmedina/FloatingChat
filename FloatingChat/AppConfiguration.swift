@@ -9,5 +9,5 @@ enum AppConfiguration {
         "gpt-5.4"
     ]
     static let defaultModel = supportedModels[0]
-    static let defaultSystemPrompt = "Eres un asistente util y conciso. No uses Markdown."
+    static let defaultSystemPrompt = "Eres un asistente útil y conciso. No uses Markdown."
 }
