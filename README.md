@@ -31,6 +31,19 @@ FloatingChat es una app pensada para hacer consultas pequeñas de forma rápida 
 3. Ejecuta con Product > Run.
 4. Abre Ajustes (ícono de engrane) y agrega tu API key.
 
+## Permisos de Accesibilidad
+
+El atajo global **Cmd + Shift + Space** se registra mediante las APIs de **Carbon** (`RegisterEventHotKey`). En macOS moderno, esto requiere que la aplicación esté habilitada en **Seguridad y Privacidad > Accesibilidad** para poder interceptar eventos de teclado a nivel global.
+
+### Cómo habilitar
+1. Abrir **Preferencias del Sistema > Seguridad y Privacidad > Accesibilidad** (o **Privacidad y Seguridad > Accesibilidad** en macOS Ventura+).
+2. Hacer clic en el candado y autenticarse para realizar cambios.
+3. Arrastrar `FloatingChat.app` a la lista de apps permitidas (o usar el botón **+**).
+4. Asegurarse de que la casilla junto a `FloatingChat` esté marcada.
+5. Si la app ya estaba en la lista pero el atajo no responde, desmarcar y volver a marcar la casilla para forzar la re-autorización.
+
+> Si el permiso no se otorga, el atajo global no funcionará; el panel solo se podrá mostrar/ocultar desde el ícono de la barra de menú.
+
 ## Uso rápido
 
 - Escribe un mensaje y presiona Enter para enviar.
