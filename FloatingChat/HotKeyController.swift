@@ -1,83 +1,47 @@
-import Carbon
+import AppKit
 import Foundation
 
-private let floatingChatHotKeyHandler: EventHandlerUPP = { _, eventRef, userData in
-    guard let eventRef, let userData else { return noErr }
-
-    var eventHotKeyID = EventHotKeyID()
-    let status = GetEventParameter(
-        eventRef,
-        EventParamName(kEventParamDirectObject),
-        EventParamType(typeEventHotKeyID),
-        nil,
-        MemoryLayout<EventHotKeyID>.size,
-        nil,
-        &eventHotKeyID
-    )
-
-    guard status == noErr else { return status }
-
-    let controller = Unmanaged<HotKeyController>.fromOpaque(userData).takeUnretainedValue()
-    return controller.handle(eventHotKeyID)
-}
-
 final class HotKeyController {
-    private let hotKeyID = EventHotKeyID(signature: OSType(0x46434854), id: 1)
     private let action: @MainActor () -> Void
-
-    private var hotKeyRef: EventHotKeyRef?
-    private var eventHandlerRef: EventHandlerRef?
+    private var keyCode: UInt16 = 49
+    private var modifiers: NSEvent.ModifierFlags = [.command, .shift]
+    private var localMonitor: Any?
+    private var globalMonitor: Any?
 
     init(action: @escaping @MainActor () -> Void) {
         self.action = action
     }
 
     @discardableResult
-    func register(keyCode: UInt32 = UInt32(kVK_Space), modifiers: UInt32 = UInt32(cmdKey | shiftKey)) -> Bool {
+    func register(keyCode: UInt16 = 49, modifiers: NSEvent.ModifierFlags = [.command, .shift]) -> Bool {
         unregister()
+        self.keyCode = keyCode
+        self.modifiers = normalized(modifiers)
 
-        var eventType = EventTypeSpec(
-            eventClass: OSType(kEventClassKeyboard),
-            eventKind: UInt32(kEventHotKeyPressed)
-        )
-
-        let handlerStatus = InstallEventHandler(
-            GetApplicationEventTarget(),
-            floatingChatHotKeyHandler,
-            1,
-            &eventType,
-            UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque()),
-            &eventHandlerRef
-        )
-
-        guard handlerStatus == noErr else { return false }
-
-        let registerStatus = RegisterEventHotKey(
-            keyCode,
-            modifiers,
-            hotKeyID,
-            GetApplicationEventTarget(),
-            0,
-            &hotKeyRef
-        )
-
-        guard registerStatus == noErr else {
-            unregister()
-            return false
+        localMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self else { return event }
+            guard self.matches(event) else { return event }
+            self.triggerAction()
+            return nil
         }
 
-        return true
+        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self, self.matches(event) else { return }
+            self.triggerAction()
+        }
+
+        return localMonitor != nil || globalMonitor != nil
     }
 
     func unregister() {
-        if let hotKeyRef {
-            UnregisterEventHotKey(hotKeyRef)
-            self.hotKeyRef = nil
+        if let localMonitor {
+            NSEvent.removeMonitor(localMonitor)
+            self.localMonitor = nil
         }
 
-        if let eventHandlerRef {
-            RemoveEventHandler(eventHandlerRef)
-            self.eventHandlerRef = nil
+        if let globalMonitor {
+            NSEvent.removeMonitor(globalMonitor)
+            self.globalMonitor = nil
         }
     }
 
@@ -85,17 +49,17 @@ final class HotKeyController {
         unregister()
     }
 
-    fileprivate func handle(_ eventHotKeyID: EventHotKeyID) -> OSStatus {
-        guard eventHotKeyID.signature == hotKeyID.signature,
-              eventHotKeyID.id == hotKeyID.id
-        else {
-            return noErr
-        }
+    private func matches(_ event: NSEvent) -> Bool {
+        event.keyCode == keyCode && normalized(event.modifierFlags) == modifiers
+    }
 
+    private func normalized(_ flags: NSEvent.ModifierFlags) -> NSEvent.ModifierFlags {
+        flags.intersection([.command, .shift, .option, .control])
+    }
+
+    private func triggerAction() {
         Task { @MainActor in
             action()
         }
-
-        return noErr
     }
 }

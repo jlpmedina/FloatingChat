@@ -5,6 +5,10 @@ struct ContentView: View {
     @StateObject private var vm = ChatViewModel()
     @FocusState private var focused: Bool
 
+    private var isInputEmpty: Bool {
+        vm.inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
@@ -101,14 +105,14 @@ struct ContentView: View {
                         .foregroundStyle(.white)
                         .frame(width: 34, height: 34)
                         .background(
-                            vm.inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                            isInputEmpty
                                 ? Color.accentColor.opacity(0.4)
                                 : Color.accentColor
                         )
                         .clipShape(Circle())
                 }
                 .buttonStyle(.borderless)
-                .disabled(vm.inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                .disabled(isInputEmpty)
             }
             .padding(10)
         }
@@ -121,4 +125,3 @@ struct ContentView: View {
         }
     }
 }
-
