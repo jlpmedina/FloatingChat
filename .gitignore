@@ -1,6 +1,9 @@
 # macOS
 .DS_Store
 
+# Editor temporary files
+*.swp
+
 # Xcode user-specific files
 xcuserdata/
 *.xcuserstate
