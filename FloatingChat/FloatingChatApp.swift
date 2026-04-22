@@ -3,6 +3,7 @@ import AppKit
 
 extension Notification.Name {
     static let floatingChatShouldFocusInput = Notification.Name("floatingChatShouldFocusInput")
+    static let floatingChatShouldClearConversation = Notification.Name("floatingChatShouldClearConversation")
 }
 
 @main
@@ -81,6 +82,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let toggleItem = NSMenuItem(title: "Mostrar / Ocultar  ⌘⇧Space", action: #selector(togglePanel), keyEquivalent: "")
         toggleItem.target = self
         menu.addItem(toggleItem)
+        let clearConversationItem = NSMenuItem(title: "Borrar conversación", action: #selector(clearConversation), keyEquivalent: "k")
+        clearConversationItem.keyEquivalentModifierMask = [.command]
+        clearConversationItem.target = self
+        menu.addItem(clearConversationItem)
         menu.addItem(.separator())
         let quitItem = NSMenuItem(title: "Salir", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         quitItem.keyEquivalentModifierMask = [.command]
@@ -98,5 +103,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSApp.activate(ignoringOtherApps: true)
             NotificationCenter.default.post(name: .floatingChatShouldFocusInput, object: nil)
         }
+    }
+
+    @objc func clearConversation() {
+        NotificationCenter.default.post(name: .floatingChatShouldClearConversation, object: nil)
     }
 }

@@ -123,5 +123,8 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: .floatingChatShouldFocusInput)) { _ in
             focused = true
         }
+        .onReceive(NotificationCenter.default.publisher(for: .floatingChatShouldClearConversation)) { _ in
+            vm.clear()
+        }
     }
 }
